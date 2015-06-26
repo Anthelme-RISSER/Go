@@ -1,0 +1,187 @@
+body{
+    background: #dedede;
+}
+
+.ninjaB{
+    width: 150px;
+    height: 200px;
+    margin: 50px auto;
+}
+
+.head{
+    width: 100%;
+    height: 100px;
+    position: relative;
+}
+
+.masque{
+    width: 150px;
+    height: 100px;
+    border: solid 2px;
+    border-color: white;
+    border-radius: 60px;
+    background: black;
+    z-index: 2;
+}
+
+.rondG{
+    width: 47px;
+    height: 40px;
+    background: antiquewhite;
+    z-index: 1;
+    margin-top: -85px;
+    margin-left: 10px;
+    border-radius: 19px;
+    display: block;
+    
+}
+
+.rondD{
+    width: 47px;
+    height: 40px;
+    background: antiquewhite;
+    z-index: 1;
+    margin-top: -40px;
+    margin-left: 73px;
+    border-radius: 19px;
+    display: block;
+    position: fixed;
+}
+
+.rectM{
+    width: 90px;
+    height: 25px;
+    background: antiquewhite;
+    position: fixed;
+    margin-left: 18px;   
+    margin-top: -39px;
+    border-radius: 10%;
+    position: absolute;
+    z-index: 1;
+}
+
+.oeilG{
+    width: 15px;
+    height: 15px;
+    background: black ;
+    margin-top: -23px;
+    position: fixed;
+    margin-left: 24px;
+    border-radius: 50px;
+    position: absolute;
+    z-index: 1;
+}
+
+.oeilD{
+    width: 15px;
+    height: 15px;
+    background: black;
+    margin-top: -23px;
+    position: fixed;
+    margin-left: 95px;
+    border-radius: 50px;
+    position: absolute;
+    z-index: 1;
+}
+
+.corps{
+    margin-left: 35px;
+    width: 100px;
+    height: 120px;
+    background: black;
+    border-radius: 30px;
+    border: solid 2px white;
+}
+
+.jambeG{
+    margin-top: -5px;
+    margin-left: 33px;
+    width: 50px;
+    height: 30px;
+    background: black;
+    border-radius: 30px;
+    border: solid 2px white;
+}
+
+.jambeD{
+    margin-top: -34px;
+    margin-left: 88px;
+    width: 50px;
+    height: 30px;
+    background: black;
+    border-radius: 30px;
+    border: solid 2px white;
+}
+
+.brasG{
+    width:10px;
+    height:90px;
+    background: black;
+    border: solid 2px white;
+    border-radius: 20px;
+    margin-left:90px;
+    margin-top:-138px;
+    transform: rotate(-115deg); 
+    position: relative;
+}
+
+.mainG{
+    margin-top: -45px;
+    margin-left:30px;
+    height: 28px;
+    width: 28px;
+    background: black;
+    border : solid 2px white;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.mainD{
+    margin-top: -64px;
+    margin-left:20px;
+    height: 28px;
+    width: 28px;
+    background: black;
+    border : solid 2px white;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.armeBas{
+    margin-left: 53px;
+    margin-top: -19px;
+    height: 18px;
+    width: 13px;
+    background: #CECECE;
+    transform: rotate(-35deg);
+    position: inherit;
+}
+
+.armeMain{
+    margin-top: -78px;
+    margin-left: 18px;
+    width: 10px;
+    height: 30px;
+    background:#CECECE;
+    transform: rotate(-130deg);
+}
+
+.armeRect{
+    margin-top: -74px;
+    margin-left: -79px;
+    width: 124px;
+    height: 20px;
+    background: #9E9E9E;
+    transform: rotate(50deg)
+}
+
+.armeTr{
+    margin-top: -74px;
+    margin-left: -73px;
+    transform: rotate(-42deg);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 20px 20px;
+    border-color: transparent transparent #9e9e9e transparent;
+}

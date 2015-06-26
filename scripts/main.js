@@ -1,5 +1,3 @@
-$(document).ready(function(){
-
     /**************************
 
             VARIABLES
@@ -16,7 +14,7 @@ $(document).ready(function(){
 
     var allGroup = new Array();
     
-    var suicide = false;
+    var vSuicide = false;
     
     var currentGroup = new Array(); // a table with numero of group to escape to the repetition of instructions.
     
@@ -24,18 +22,202 @@ $(document).ready(function(){
     
     var cptBlack = 0;
     var cptWhite = 0;
+
+    
+    var millisecond = 0;
+    var second = 0; 
+    var minute = 0;
+    
+    var secDown = 0;
+    var minDown = 3;
+    
+    var havePassed = false;
+    
+    var vModeIA = false;
+
+
+
+$(document).ready(function(){
+
+ /*******************************
+    
+    
+                TOOLS
+    
+    
+    *******************************/
+    
+    
+    /*****************************
+
+    FUNCTION TO ALTERNATE PLAYERS 
+
+    ******************************/
+
+    function changePlayer()
+    {
+        if(currentPlayer=="player1")
+        {
+            currentPlayer="player2";
+            opponentPlayer = "player1";
+        }
+        else if(currentPlayer=="player2")
+        {
+            currentPlayer="player1";
+            opponentPlayer = "player2";
+        }
+        console.log(currentPlayer);
+        
+        turn ++;
+    }
+
+
+
+    
+    
+    
+    /******************************
+    
+                TIMER
+    
+    ******************************/
+    
+    function timer()
+    {
+        'use strict';
+        
+        var myTime = setTimeout(function(){
+        millisecond++; 
+        if (millisecond > 99)
+        {
+            millisecond = 0;
+            second++;
+            document.getElementById("seconds").innerHTML = second; 
+        }    
+
+        if (second > 59)
+        {
+            second = 0; 
+            minute++;
+            document.getElementById("minutes").innerHTML = minute; 
+        }   
+
+        document.getElementById("milliseconds").innerHTML = millisecond; 
+
+        timer();
+    }, 5);   
+        
+    }
+    
+    
+    /************************
+    
+            COUNTDOWN
+    
+    ************************/
+    
+    function countdown()
+    {
+        
+        'use strict';
+        
+        myCountdown = setTimeout(function(){
+            
+            if(secDown == 0)
+            {
+                
+                secDown = 59;
+                minDown --;
+                
+            }
+            
+            else
+            {
+                
+                secDown --;  
+                
+            }
+            
+            if(secDown == 0 && minDown == 0)
+            {
+                
+                   //victoire défaite
+                
+            }
+            
+        countdown(); 
+            
+        }, 10);
+        
+    }
+    
+ 
+    /******************************
+    
+                MODE IA
+    
+    ******************************/
+    
+    function modeIA()
+    {
+        
+        'use strict';
+        
+        vModeIA = true;
+        
+    }
     
 
-
-
-
-/*********************************
+    /*******************************
+    
+            FUNCTION TO PASS
+    
+    ********************************/
+    
+    function pass()
+    {
+        
+        'use strict';
+        
+        console.log("entrée dans la fonction pass");
+        
+        if(havePassed == false)
+        {
+            
+            havePassed == true;   
+            
+        }
+        
+        else
+        {
+            
+            if(cptBlack > cptWhite)
+            {
+                
+                window.alert("Victoire Black");
+                
+            }
+            
+            else if(cptBlack < cptWhite)
+            {
+                
+                window.alert("Victoire White");  
+                
+            }
+            
+            
+        }
+        
+    }
+    
+    
+/********************************
 
 
         GAME'S PROGRESS  
 
 
-**********************************/
+*********************************/
 
     function Game(){
 
@@ -55,38 +237,47 @@ $(document).ready(function(){
             audio.muted = !audio.muted;
             e.preventDefault();
             }, false);*/
-            
             console.log("turn : " + turn);
-
-            var currentX = parseInt(($(this).attr('id').split("_"))[1]); //coordinated X to the current emplacement selected 
-            var currentY = parseInt(($(this).attr('id').split("_"))[0]); //coordinated Y to the current emplacement selected 
-            
-            if(golan[currentY][currentX][0] == currentPlayer || golan[currentY][currentX][0] == opponentPlayer)
+            if(modeIA == true && currentPlayer == "player2")
             {
+                console.log("entrée fonction ia");
+                artificialIntelligence();
+            
+            }
+            
+            else
+            {
+                var currentX = parseInt(($(this).attr('id').split("_"))[1]); //coordinated X to the current emplacement selected 
+                var currentY = parseInt(($(this).attr('id').split("_"))[0]); //coordinated Y to the current emplacement selected 
+            
+                if(golan[currentY][currentX][0] == currentPlayer || golan[currentY][currentX][0] == opponentPlayer)
+                {
              
-                //the user can't click on the same position
-                console.log("occupé");
-                return false;
+                    //the user can't click on the same position
+                    console.log("occupé");
+                    return false;
                 
-            }
+                }
             
-            golan[currentY][currentX] = new Array(3);
-            golan[currentY][currentX][0] = currentPlayer;
-            golan[currentY][currentX][2] = "";
+                golan[currentY][currentX] = new Array(3);
+                golan[currentY][currentX][0] = currentPlayer;
+                golan[currentY][currentX][2] = "";
 
-            var currentFreeDeg = counterFreeDeg(currentX, currentY);
-            
-            if(currentFreeDeg == false)
-            {
-                golan[currentY][currentX] = false; 
-                return false;
+                var currentFreeDeg = counterFreeDeg(currentX, currentY);
+             
+                if(currentFreeDeg == false)
+                {
+                    golan[currentY][currentX] = false; 
+                    return false;
+                }
+    
+                golan[currentY][currentX][1] = currentFreeDeg;
+
+                console.log("i = " + currentY + " j = " + currentX + " nbrFreeDeg = " + currentFreeDeg);
+    
+                $(this).addClass(currentPlayer);
+                    
             }
-
-            golan[currentY][currentX][1] = currentFreeDeg;
-
-            console.log("i = " + currentY + " j = " + currentX + " nbrFreeDeg = " + currentFreeDeg);
-
-            $(this).addClass(currentPlayer);
             changePlayer();
 
         });
@@ -180,18 +371,20 @@ $(document).ready(function(){
 
                     case 0 :
 
-                        if(golan[posY][posX+1][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer)
+                        if((golan[posY][posX+1][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == currentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY+1][posX][0] == currentPlayer))
                         {
                          
                             suicide = true;
                             
-                            suicide = Suicide(posX, posY, posX+1, posY);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX+1, posY);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX, posY+1);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX, posY+1);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = false;
+                            vSuicide = false;
                             currentGroup = false;
                             currentGroup = new Array();
                             
@@ -213,18 +406,20 @@ $(document).ready(function(){
 
                     case size-1 :
                         
-                        if(golan[posY-1][posX][0] == opponentPlayer && golan[posY][posX+1][0] == opponentPlayer)
+                        if((golan[posY-1][posX][0] == opponentPlayer && golan[posY][posX+1][0] == opponentPlayer) ||
+                          (golan[posY-1][posX][0] == currentPlayer && golan[posY][posX+1][0] == opponentPlayer) ||
+                          (golan[posY-1][posX][0] == opponentPlayer && golan[posY][posX+1][0] == currentPlayer))
                         {
                          
-                            suicide = true;
+                            vSuicide = true;
                             
-                            suicide = Suicide(posX, posY, posX, posY-1);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX, posY-1);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX+1, posY);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX+1, posY);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = false;
+                            vSuicide = false;
                             currentGroup = false;
                             currentGroup = new Array();
                             
@@ -245,21 +440,26 @@ $(document).ready(function(){
                     default :
 
                         
-                        if(golan[posY][posX+1][0] == opponentPlayer && golan[posY-1][posX][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer)
+                        if((golan[posY][posX+1][0] == opponentPlayer && golan[posY-1][posX][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == currentPlayer && golan[posY-1][posX][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY-1][posX][0] == currentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY-1][posX][0] == opponentPlayer && golan[posY+1][posX][0] == currentPlayer) ||
+                          (golan[posY][posX+1][0] == currentPlayer && golan[posY-1][posX][0] == currentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY-1][posX][0] == currentPlayer && golan[posY+1][posX][0] == currentPlayer))
                         {
                          
-                            suicide = true;
+                            vSuicide = true;
                             
-                            suicide = Suicide(posX, posY, posX+1, posY);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX+1, posY);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX, posY-1);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX, posY-1);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX, posY+1);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX, posY+1);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = false;
+                            vSuicide = false;
                             currentGroup = false;
                             currentGroup = new Array();
                             
@@ -290,18 +490,20 @@ $(document).ready(function(){
 
                     case 0 :
                         
-                        if(golan[posY+1][posX][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer)
+                        if((golan[posY+1][posX][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer) ||
+                          (golan[posY+1][posX][0] == currentPlayer && golan[posY][posX-1][0] == opponentPlayer) ||
+                          (golan[posY+1][posX][0] == opponentPlayer && golan[posY][posX-1][0] == currentPlayer))
                         {
                          
-                            suicide = true;
+                            vSuicide = true;
                             
-                            suicide = Suicide(posX, posY, posX, posY+1);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX, posY+1);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX-1, posY);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX-1, posY);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = false;
+                            vSuicide = false;
                             currentGroup = false;
                             currentGroup = new Array();
                             
@@ -323,18 +525,20 @@ $(document).ready(function(){
                     case size-1 :
 
                         
-                        if(golan[posY-1][posX][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer)
+                        if((golan[posY-1][posX][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer) ||
+                          (golan[posY-1][posX][0] == currentPlayer && golan[posY][posX-1][0] == opponentPlayer) ||
+                          (golan[posY-1][posX][0] == opponentPlayer && golan[posY][posX-1][0] == currentPlayer))
                         {
                          
-                            suicide = true;
+                            vSuicide = true;
                             
-                            suicide = Suicide(posX, posY, posX, posY-1);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX, posY-1);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX-1, posY);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX-1, posY);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = false;
+                            vSuicide = false;
                             currentGroup = false;
                             currentGroup = new Array();
                             
@@ -354,21 +558,26 @@ $(document).ready(function(){
 
                     default :
 
-                        if(golan[posY-1][posX][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer)
+                        if((golan[posY-1][posX][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY-1][posX][0] == currentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY-1][posX][0] == opponentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY-1][posX][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY+1][posX][0] == currentPlayer) ||
+                          (golan[posY-1][posX][0] == currentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY-1][posX][0] == opponentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY+1][posX][0] == currentPlayer))
                         {
                          
-                            suicide = true;
+                            vSuicide = true;
                             
-                            suicide = Suicide(posX, posY, posX, posY-1);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX, posY-1);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX-1, posY);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX-1, posY);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX, posY+1);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX, posY+1);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = false;
+                            vSuicide = false;
                             currentGroup = false;
                             currentGroup = new Array();
                             
@@ -398,21 +607,26 @@ $(document).ready(function(){
 
                     case 0 :
                         
-                        if(golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer)
+                        if((golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == currentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY+1][posX][0] == currentPlayer) ||
+                          (golan[posY][posX+1][0] == currentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY+1][posX][0] == currentPlayer))
                         {
                          
-                            suicide = true;
+                            vSuicide = true;
                             
-                            suicide = Suicide(posX, posY, posX+1, posY);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX+1, posY);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX-1, posY);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX-1, posY);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX, posY+1);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX, posY+1);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = false;
+                            vSuicide = false;
                             currentGroup = false;
                             currentGroup = new Array();
                             
@@ -434,21 +648,26 @@ $(document).ready(function(){
 
                     case size-1 :
                         
-                        if(golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY-1][posX][0] == opponentPlayer)
+                        if((golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY-1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == currentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY-1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY-1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY-1][posX][0] == currentPlayer) ||
+                          (golan[posY][posX+1][0] == currentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY-1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY-1][posX][0] == currentPlayer))
                         {
                          
-                            suicide = true;
+                            vSuicide = true;
                             
-                            suicide = Suicide(posX, posY, posX+1, posY);
-                            if(suicide == false){return false;}
+                           vSsuicide = suicide(posX, posY, posX+1, posY);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX-1, posY);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX-1, posY);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX, posY-1);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX, posY-1);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = false;
+                            vSuicide = false;
                             currentGroup = false;
                             currentGroup = new Array();
                             
@@ -470,24 +689,34 @@ $(document).ready(function(){
 
                     default :
 
-                        if(golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY-1][posX][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer)
+                        if((golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY-1][posX][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == currentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY-1][posX][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY-1][posX][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY-1][posX][0] == currentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY-1][posX][0] == opponentPlayer && golan[posY+1][posX][0] == currentPlayer) ||
+                          (golan[posY][posX+1][0] == currentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY-1][posX][0] == opponentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == currentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY-1][posX][0] == currentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == currentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY-1][posX][0] == opponentPlayer && golan[posY+1][posX][0] == currentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY-1][posX][0] == currentPlayer && golan[posY+1][posX][0] == opponentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == currentPlayer && golan[posY-1][posX][0] == opponentPlayer && golan[posY+1][posX][0] == currentPlayer) ||
+                          (golan[posY][posX+1][0] == opponentPlayer && golan[posY][posX-1][0] == opponentPlayer && golan[posY-1][posX][0] == currentPlayer && golan[posY+1][posX][0] == currentPlayer))
                         {
                          
-                            suicide = true;
+                            vSuicide = true;
                             
-                            suicide = Suicide(posX, posY, posX+1, posY);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX+1, posY);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX-1, posY);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX-1, posY);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX, posY-1);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX, posY-1);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = Suicide(posX, posY, posX, posY+1);
-                            if(suicide == false){return false;}
+                            vSuicide = suicide(posX, posY, posX, posY+1);
+                            if(vSuicide == false){return false;}
                             
-                            suicide = false;
+                            vSuicide = false;
                             currentGroup = false;
                             currentGroup = new Array();
                             
@@ -560,9 +789,9 @@ $(document).ready(function(){
 
     /*********************************
 
-FUNCTION TO CHANGE FRIEND'S PIECE 
+    FUNCTION TO CHANGE FRIEND'S PIECE 
 
-**********************************/
+    **********************************/
 
 
     function changeFriendPiece(posX, posY, friendPosX, friendPosY)
@@ -593,7 +822,7 @@ FUNCTION TO CHANGE FRIEND'S PIECE
 
         }
 
-        else
+        else if(golan[posY][posX][2] != golan[friendPosY][friendPosX][2])
         {
 
             for(var i = 0; i < allGroup.length; i++)
@@ -684,14 +913,15 @@ FUNCTION TO CHANGE FRIEND'S PIECE
                     if(currentPlayer == "player1")
                     {
                         
-                        cptBlack += k;
-                        
+                        cptBlack += k - 1;
+                        console.log("cptBlack = " + cptBlack);                       
                     }
                     
                     else
                     {
                         
-                        cptWhite += k;
+                        cptWhite += k - 1;
+                        console.log("cptWhite = " + cptWhite);
                         
                     }
 
@@ -731,7 +961,7 @@ FUNCTION TO CHANGE FRIEND'S PIECE
     ****************************************/ 
     
     
-    function Suicide(posX, posY, rivalPosX, rivalPosY)
+    function suicide(posX, posY, rivalPosX, rivalPosY)
     {
         
         'use strict';
@@ -740,13 +970,13 @@ FUNCTION TO CHANGE FRIEND'S PIECE
         
         var death = true;
         
-        
+        /*
         for(var i = 0; i < currentGroup.length; i++)
         {
             
             if(golan[rivalPosY][rivalPosX][2] == currentGroup[i]){return false;}
             
-        }
+        }*/
         
         for(var i = 0; i < allGroup.length; i++)
         {
@@ -843,30 +1073,133 @@ FUNCTION TO CHANGE FRIEND'S PIECE
     }
 
 
-
-    /*****************************
-
-    FUNCTION TO ALTERNATE PLAYERS 
-
-    ******************************/
-
-    function changePlayer()
+/*********************************
+    
+            RANDOM PLACEMENT
+    
+    *********************************/
+    
+    function randomPlacement()
     {
-        if(currentPlayer=="player1")
-        {
-            currentPlayer="player2";
-            opponentPlayer = "player1";
-        }
-        else if(currentPlayer=="player2")
-        {
-            currentPlayer="player1";
-            opponentPlayer = "player2";
-        }
-        console.log(currentPlayer);
         
-        turn ++;
-    }
+        'use strict';
+        
+        do
+        {
+            
+            var posAleaX = parseInt(Math.random() * size);
+            var posAleaY = parseInt(Math.random() * size);
+            
+            
+            
+        }while(golan[posAleaY][posAleaX][0] == opponentPlayer || golan[posAleaY][posAleaX][0] == currentPlayer)
+            
+        do{
+            golan[posAleaY][posAleaX] = new Array(3);
+            golan[posAleaY][posAleaX][0] = currentPlayer;
+            golan[posAleaY][posAleaX][2] = "";
 
+            var currentFreeDeg = counterFreeDeg(posAleaX, posAleaY);
+        
+            if(currentFreeDeg == false){golan[currentY][currentX] = false;}
+            
+        }while(currentFreeDeg == false)
+            
+        golan[posAleaY][posAleaX][1] = currentFreeDeg;
+        
+        document.getElementById(posAleaY + "_" + posAleaX).addClass(currentPlayer);
+        
+    }
+    
+    
+    
+        /********************************************
+    
+    
+    
+                    ARTIFICIAL INTELLIGENCE
+    
+    
+    
+        ********************************************/
+    
+    
+    function artificialIntelligence()
+    {
+        
+        'use strict';
+        
+        var a = Math.round(Math.random());
+        
+        if(a == 0)
+        {
+            
+            if(cptWhite >=10)
+            {
+                
+                var a = Math.round(Math.random());
+                
+                if(a == 0)
+                {
+            
+                    randomPlacement();
+            
+                }
+        
+                else
+                {
+            
+                    pass();
+            
+                }
+                
+            }
+            
+            else
+            {
+                
+                randomPlacement();   
+                
+            }
+            
+        }
+        
+        else
+        {
+            
+            
+            
+        }
+        
+    }
+    /*
+    
+    je tire aléatoirementre 1 et 0
+    
+    si c'est 0 
+    
+    si cptWhite > 10
+    
+    tirage aléa 0 et 1
+    
+    si 1 pass
+    
+    si 0
+    je place aléatoirement la pièce sur le plateau en retirant à chaque fois tant que la position sélectionner est prise
+    
+    si je tire 1 
+    je tire aléatoirement un i entre 0 et la longueur de allGroup
+    je regarde la nature de la première pièce du groupe si c'est un opposant je reste sinon je retire
+    si c'est un opposant je tire un j aléatoirement entre 1 et la longueur de la ligne
+    si la pièce tirer n'a pas de dgr de lib je retire
+    sinon je tire aléatoirement un k entre 1 et le nombre de dgr de lib de la pièce
+    et je place mon piont à la position de ce degré de lib
+    */
+    
+    
+    
+    
+   
 
 
     // ANIMATION LOGO
@@ -886,37 +1219,68 @@ FUNCTION TO CHANGE FRIEND'S PIECE
 
     $("#logo").click(function(){
 
-        $(".buttons").toggle(2000);
+        $(".button_choice").css('opacity', '1');
 
     });
 
+    $(".button_choice").click(function(){
 
+        $(".buttons").fadeToggle(1500);
+         $(".button_choice").css('opacity', '0');
+       
+
+    });
+    
+    $("ia").click(function(){
+        
+        modeIA();
+        
+    });
+    
+     $("pass").click(function(){
+        
+        pass();
+        changePlayer()
+        
+    });
+
+    
     // CHOIX DE LA TAILLE DE LA GRILLE & APPARITION DE LA GRILLE
     $("#littleGrid").click(function(){
-        $(".buttons2").toggle(1000);
-        $(".buttons").toggle(1000);
+        $(".buttons2").slideToggle(800);
+        $(".buttons").slideToggle(800);
+        $(".compteur").toggle(1000);
         size = 9;
         createGolan();
+        timer();
+        $("#ninjablack").toggle(200);
 
     });
 
 
     $("#mediumGrid").click(function(){
-        $(".buttons2").toggle(1000);
-        $(".buttons").toggle(1000);
+        $(".buttons2").slideToggle(800);
+        $(".buttons").slideToggle(800);
+        $(".compteur").toggle(1000);
         size = 13;
         createGolan();
+        timer();
+        $("#ninjablack").toggle(200);
 
     });
 
     $("#bigGrid").click(function(){
-        $(".buttons2").toggle(1000);
-        $(".buttons").toggle(1000);
+        $(".buttons2").slideToggle(800);
+        $(".buttons").slideToggle(800);
+        $(".compteur").toggle(1000);
         size = 19;
         createGolan();
+        timer();
+        $("#ninjablack").toggle(200);
 
     });
 
+    
 
 });
 

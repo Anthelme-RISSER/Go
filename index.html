@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="style-ie.css" />
 <![endif]-->
         <link rel='stylesheet' href='styles/style.css'>
+        <link rel='stylesheet' href='styles/ninjablack.css'>
 
 
 
@@ -28,17 +29,90 @@
                 <img src="img/soleil.svg" alt="Soleil rouge" id="soleil" class="container rotating">
             </div>
             <!-- DIVERS BOUTONS -->
-            <div class="container">			
-                <button class="buttons button--wayra button--border-thin button--round-s" id="littleGrid" href="#">9x9</button>
-                <button class="buttons button--wayra button--border-thin button--round-s" id="mediumGrid" href="#">13x13</button>
-                <button class="buttons button--wayra button--border-thin button--round-s" id="bigGrid" href="#">19x19</button>
-                <button class="buttons2 button--wayra button--border-thin button--round-s" id="play" href="#">Play</button>
-                <button class="buttons2 button--wayra button--border-thin button--round-s" id="stop" href="#">Stop</button>
-                <button class="buttons2 button--wayra button--border-thin button--round-s" id="pass" href="#">Pass</button>
+            <div class="container">	
+                <div class="button_choice" id="versus">
+                    <p>J1 vs J2 </p>
+                </div>
+			    <div class="button_choice" id="ia">
+			        <p>J1 vs IA</p>
+			     </div>
+		
+                <div class="buttons button_base neuf" id="littleGrid" href="#">
+                    <div class="back" href="#"><br/><br/><span>9x9</span></div>
+  					<div class="front" href="#"><span>9x9</span></div>
+                </div>
+                <div class="buttons button_base treize" id="mediumGrid" href="#">
+                    <div class="back" href="#"><br/><br/><span>13x13</span></div>
+  					<div class="front" href="#"><span>13x13</span></div>
+                </div>
+                <div class="buttons button_base dixneuf" id="bigGrid" href="#">
+                    <div class="back" href="#"><br/><br/><span>19x19</span></div>
+  					<div class="front" href="#"><span>19x19</span></div>
+                </div>
+                
+                
+                <div class="buttons2 button_base" id="play" href="#">
+                    <div class="back" href="#"><br/><br/><span>Play</span></div>
+  					<div class="front" href="#"><span>Play</span></div>
+                </div>
+                
+                <div class="buttons2 button_base" id="stop" href="#">
+                    <div class="back" href="#"><br/><br/><span>Stop</span></div>
+  					<div class="front" href="#"><span>Stop</span></div>
+                </div>
+                
+                <div class="buttons2 button_base" id="pass" href="#">
+                    <div class="back" href="#"><br/><br/><span>Pass</span></div>
+  					<div class="front" href="#"><span>Pass</span></div>
+                </div>
+                
+                <div class="compteur" id="compteur" style="text-align:center;">
+					<img src="img/rond_blanc.png" alt="rondblanc" style="width:65px; height:65px; padding-right:12px; padding-top: 10px;"/>
+					<img src="img/rond_noir.png" alt="rondnoir" style="width:65px; height:65px;"/>
+                    <div id="timer"><span id="minutes">0</span>:<span id="seconds">00</span>:<span id="milliseconds">000</span></div>
+				</div>
+                
             </div>
         </div>
 
-
+        <div id="ninjablack">
+		    <div class="ninjaB">
+		        <div class="head">
+		           <div class="masque">
+		               
+		           </div>
+		           <div class="visage">
+		              <div class="rondG"></div>
+		              <div class="rectM"></div>
+		              <div class="rondD"></div>  
+		              <div class="oeilG"></div>
+		              <div class="oeilD"></div>
+		           </div>
+		       </div>
+		        
+		        <div class="body">
+		           <div class="corps"> </div>
+		           <div class="jambeG"></div>
+		           <div class="jambeD"></div>
+		        </div>
+		        
+		        <div class="brasMain">
+		            <div class="brasG"></div>
+		            <div class="mainG"></div>
+		            <div class="mainD"></div>
+		        </div>
+		        
+		        <div class="arme">
+		            <div class="armeBas"></div>
+		            <div class="armeMain"></div>
+		            <div class="armeRect"></div>
+		            <div class="armeTr"></div>
+		        </div>
+		        
+		    </div>
+		</div>
+        
+        
         <audio id="music" autoplay loop>
             <source src="audiomachine.mp3">
         </audio>
